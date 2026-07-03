@@ -1,0 +1,2899 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
+    <title>Polvon Hisob-Kitob</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4500;
+            --secondary: #ffb400;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --dark: #222222;
+            --light: #fff8f5;
+            --radius: 12px;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            --bg-body: #fafafa;
+            --bg-card: white;
+            --text-main: #333;
+            --text-muted: #666;
+            --border-color: #eee;
+        }
+
+        body.dark-mode {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #f5f6fa;
+            --text-muted: #a4b0be;
+            --border-color: #2f3542;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            background: var(--bg-body);
+            min-height: 100vh;
+            min-height: 100dvh;
+            color: var(--text-main);
+            transition: background 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: rgba(255, 69, 0, 0.12);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        /* Layout */
+        #app-container {
+            display: none;
+        }
+
+        #login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            background: var(--bg-body);
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-card);
+            padding: 15px 5%;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: var(--text-main);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+            min-height: 48px;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 69, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #e03e00;
+        }
+
+        @media (hover: hover) {
+            .btn-primary:hover {
+                transform: translateY(-2px);
+            }
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 5%;
+            background: var(--bg-card);
+            padding: 10px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 22px;
+            border: none;
+            background: none;
+            color: var(--text-main);
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            min-height: 48px;
+            touch-action: manipulation;
+            flex-shrink: 0;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 69, 0, 0.1);
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 69, 0, 0.3);
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            padding: 20px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards & Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            border-radius: var(--radius);
+            font-size: 16px;
+            min-height: 48px;
+            transition: 0.3s;
+            touch-action: manipulation;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Login Form */
+        .login-box {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid var(--primary);
+        }
+
+        .login-box h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.03);
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        /* Recipe Ingredients List */
+        .ingredient-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .ingredient-row select,
+        .ingredient-row input {
+            flex: 1;
+        }
+
+        /* Sales Cards */
+        .sale-card {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sale-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--success);
+            margin: 10px 0;
+        }
+
+        .sale-cost {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .sales-workspace {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 340px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .cart-panel {
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .cart-empty {
+            color: var(--text-muted);
+            text-align: center;
+            padding: 25px 10px;
+            background: var(--bg-body);
+            border-radius: 10px;
+        }
+
+        .cart-item {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .cart-item-top,
+        .cart-total-row,
+        .cart-qty-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .cart-item-name {
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .cart-item-price {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .cart-qty-controls {
+            justify-content: flex-start;
+            margin-top: 10px;
+        }
+
+        .cart-icon-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            touch-action: manipulation;
+            flex-shrink: 0;
+        }
+
+        .cart-icon-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .cart-qty {
+            min-width: 34px;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .cart-total-row {
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 15px;
+            font-weight: 800;
+        }
+
+        .cart-total-row span:last-child {
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+
+        .payment-breakdown {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            display: grid;
+            gap: 5px;
+            text-align: left;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .payment-breakdown div {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .payment-breakdown strong {
+            color: var(--text-main);
+        }
+
+        .mini-stat.has-payment-breakdown {
+            text-align: left;
+            grid-column: span 2;
+        }
+
+        .mini-stat.has-payment-breakdown .value.revenue {
+            text-align: center;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 2500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .payment-modal {
+            width: 100%;
+            max-width: 440px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .payment-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .payment-total {
+            background: var(--bg-body);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+        }
+
+        .payment-total span:last-child {
+            color: var(--success);
+            font-size: 1.35rem;
+        }
+
+        .payment-options {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 700;
+            background: var(--bg-body);
+            min-height: 52px;
+            touch-action: manipulation;
+        }
+
+        .payment-option:has(input:checked) {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(255, 69, 0, 0.08);
+        }
+
+        .makeable-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .ingredients-list {
+            text-align: left;
+            font-size: 0.9rem;
+            background: var(--bg-body);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .ingredients-list ul {
+            padding-left: 20px;
+            color: var(--text-muted);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .stat-card.profit {
+            border-bottom-color: var(--success);
+        }
+
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .stat-card.profit .amount {
+            color: var(--success);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            color: white;
+            z-index: 3000;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        /* Report Period Blocks */
+        .report-period {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-period::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 100%;
+            opacity: 0.04;
+            border-radius: 0 16px 16px 0;
+        }
+
+        .report-period.period-shift {
+            border-left-color: #ff6b35;
+        }
+
+        .report-period.period-shift::before {
+            background: linear-gradient(135deg, #ff6b35, #ff4500);
+        }
+
+        .report-period.period-month {
+            border-left-color: #1e90ff;
+        }
+
+        .report-period.period-month::before {
+            background: linear-gradient(135deg, #1e90ff, #0066cc);
+        }
+
+        .report-period.period-year {
+            border-left-color: #8b5cf6;
+        }
+
+        .report-period.period-year::before {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .report-period-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .report-period-header .period-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        .period-shift .period-icon {
+            background: linear-gradient(135deg, #ff6b35, #ff4500);
+        }
+
+        .period-month .period-icon {
+            background: linear-gradient(135deg, #1e90ff, #0066cc);
+        }
+
+        .period-year .period-icon {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .report-period-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .report-period-header h3 span {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .report-mini-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .mini-stat {
+            background: var(--bg-body);
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .mini-stat .label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .mini-stat .value {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .mini-stat .value.revenue {
+            color: var(--success);
+        }
+
+        .mini-stat .value.expense {
+            color: var(--danger);
+        }
+
+        .mini-stat .value.profit-positive {
+            color: var(--success);
+        }
+
+        .mini-stat .value.profit-negative {
+            color: var(--danger);
+        }
+
+        .report-sales-toggle {
+            margin-top: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-body);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border: none;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .report-sales-toggle:hover {
+            color: var(--primary);
+        }
+
+        .report-sales-table {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .report-sales-table.open {
+            display: block;
+            animation: fadeIn 0.3s ease;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* ========== PLANShet & TELEFON ========== */
+
+        /* Planshet (601px — 1024px) */
+        @media (max-width: 1024px) {
+            header {
+                padding: 12px 16px;
+                padding-top: calc(12px + env(safe-area-inset-top));
+            }
+
+            .logo {
+                font-size: 1.3rem;
+            }
+
+            .section {
+                padding: 16px;
+                max-width: 100%;
+            }
+
+            .tabs.main-tabs {
+                margin: 12px 16px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                justify-content: flex-start;
+                scrollbar-width: none;
+                gap: 8px;
+            }
+
+            .tabs.main-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            #salesCategoryTabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                max-width: 100%;
+            }
+
+            #salesCategoryTabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            #salesCategoryTabs .tab-btn {
+                padding: 10px 18px;
+                font-size: 0.95rem;
+                min-height: 44px;
+            }
+
+            .cart-panel .card-header .btn {
+                min-width: 44px;
+                padding: 10px 12px;
+            }
+
+            #ombor > .grid,
+            #retsept > .grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 16px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .report-period {
+                padding: 18px;
+            }
+
+            .report-mini-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .mini-stat.has-payment-breakdown {
+                grid-column: span 2;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 0.92rem;
+            }
+
+            .report-sales-toggle {
+                min-height: 48px;
+                font-size: 1rem;
+            }
+
+            .payment-modal {
+                max-width: min(520px, 100%);
+            }
+
+            .modal-overlay {
+                padding: 16px;
+                padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            }
+
+            .ingredient-row {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Planshet portrait — savat pastda (POS rejimi) */
+        @media (max-width: 1024px) and (orientation: portrait) {
+            .sales-workspace {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .sales-workspace #salesGrid {
+                order: 1;
+            }
+
+            .sales-workspace .cart-panel {
+                order: 2;
+                position: sticky;
+                bottom: env(safe-area-inset-bottom, 0);
+                top: auto;
+                z-index: 200;
+                box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.14);
+                max-height: 45vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        /* Planshet landscape — savat o'ngda */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .sales-workspace {
+                grid-template-columns: minmax(0, 1fr) min(300px, 32vw);
+                gap: 16px;
+            }
+
+            .cart-panel {
+                position: sticky;
+                top: calc(80px + env(safe-area-inset-top));
+            }
+        }
+
+        /* Kichik telefon (600px gacha) */
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .report-mini-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .mini-stat.has-payment-breakdown {
+                grid-column: span 1;
+            }
+
+            .login-box {
+                padding: 28px 22px;
+            }
+
+            .notification {
+                left: 12px;
+                right: 12px;
+                top: auto;
+                bottom: calc(16px + env(safe-area-inset-bottom));
+                text-align: center;
+            }
+
+            header .btn-danger {
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="notification" class="notification"></div>
+
+    <!-- Login Screen -->
+    <div id="login-container">
+        <div class="login-box">
+            <i class="fas fa-hotdog" style="font-size: 4rem; color: var(--primary); margin-bottom: 10px;"></i>
+            <h2>Polvon Hisob-Kitob</h2>
+            <div class="form-group">
+                <input type="text" id="loginUsername" class="form-control" placeholder="Login (Ism)">
+            </div>
+            <div class="form-group">
+                <input type="password" id="loginPassword" class="form-control" placeholder="Parol">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">Kirish <i
+                    class="fas fa-sign-in-alt"></i></button>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app-container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-hotdog"></i>
+                <div>Polvon <span>Hisob</span></div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+                <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Chiqish</button>
+            </div>
+        </header>
+
+        <div id="lowStockAlert"
+            style="background: #fff3cd; color: #856404; padding: 15px 5%; font-weight: bold; display: none; text-align: center; border-bottom: 2px solid #ffeeba;">
+            <!-- content -->
+        </div>
+
+        <div class="tabs main-tabs">
+            <button class="tab-btn active" onclick="switchTab('sotuv')"><i class="fas fa-store"></i> Sotuv</button>
+            <button class="tab-btn" onclick="switchTab('ombor')"><i class="fas fa-boxes"></i> Ombor</button>
+            <button class="tab-btn" onclick="switchTab('retsept')"><i class="fas fa-book-open"></i> Retseptlar</button>
+            <button class="tab-btn" onclick="switchTab('xarajat')"><i class="fas fa-money-bill-wave"></i>
+                Xarajatlar</button>
+            <button class="tab-btn" onclick="switchTab('hisobot')"><i class="fas fa-chart-line"></i> Hisobot</button>
+        </div>
+
+        <!-- SOTUV SECTION -->
+        <div id="sotuv" class="section active">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h2><i class="fas fa-store"></i> Savdo oynasi</h2>
+                <div class="tabs" style="margin: 0; box-shadow: none; background: transparent; padding: 0;"
+                    id="salesCategoryTabs">
+                    <button class="tab-btn active" onclick="filterSales('Barchasi')"
+                        style="padding: 8px 15px; font-size: 0.9rem;">Barchasi</button>
+                    <button class="tab-btn" onclick="filterSales('HotDog')"
+                        style="padding: 8px 15px; font-size: 0.9rem;">HotDoglar</button>
+                    <button class="tab-btn" onclick="filterSales('Ichimlik')"
+                        style="padding: 8px 15px; font-size: 0.9rem;">Ichimliklar</button>
+                    <button class="tab-btn" onclick="filterSales('Desert')"
+                        style="padding: 8px 15px; font-size: 0.9rem;">Desertlar</button>
+                </div>
+            </div>
+            <div class="sales-workspace">
+                <div class="grid" id="salesGrid">
+                    <!-- Dynamically generated -->
+                </div>
+
+                <div class="card cart-panel">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-cart-shopping"></i> Savat</div>
+                        <button class="btn btn-outline" style="padding: 7px 10px;" onclick="clearCart()">
+                            <i class="fas fa-rotate-left"></i>
+                        </button>
+                    </div>
+                    <div class="cart-list" id="cartList">
+                        <div class="cart-empty">Savat bo'sh</div>
+                    </div>
+                    <div class="cart-total-row">
+                        <span>Umumiy</span>
+                        <span id="cartTotal">0 so'm</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-primary" id="checkoutBtn" style="flex: 1; justify-content:center;" onclick="openPaymentModal()" disabled>
+                            <i class="fas fa-cash-register"></i> Sotish
+                        </button>
+                        <button class="btn btn-warning" id="freeCheckoutBtn" style="flex: 1; justify-content:center; background: var(--success); color: white;" onclick="processFreeCheckout()" disabled>
+                            <i class="fas fa-gift"></i> Tekinga
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OMBOR SECTION -->
+        <div id="ombor" class="section">
+            <div class="grid" style="grid-template-columns: 1fr 2fr;">
+                <!-- Add to Inventory -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-plus-circle"></i> Mahsulot qo'shish</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mahsulot nomi (Masalan: Go'sht, Chimchi, Non)</label>
+                        <input type="text" id="invName" class="form-control" placeholder="Nomi...">
+                    </div>
+                    <div class="form-group">
+                        <label>Bozordan qanday o'lchovda sotib oldingiz?</label>
+                        <select id="invBuyUnit" class="form-control">
+                            <option value="kg">Kilogramm (kg)</option>
+                            <option value="dona">Dona</option>
+                            <option value="litr">Litr (L)</option>
+                            <option value="gramm">Gramm (g)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Necha (kg / dona / litr) oldingiz?</label>
+                        <input type="number" id="invQty" class="form-control" placeholder="Masalan: 5">
+                    </div>
+                    <div class="form-group">
+                        <label>1 (kg / dona / litr) ni necha puldan oldingiz? (so'm)</label>
+                        <input type="number" id="invPrice" class="form-control" placeholder="Masalan: 120000">
+                    </div>
+                    <button id="btnSaveInv" class="btn btn-primary" style="width: 100%;"
+                        onclick="addInventory()">Omborga qo'shish</button>
+                </div>
+
+                <!-- Inventory List -->
+                <div class="card table-scroll">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-boxes"></i> Ombordagi holat</div>
+                    </div>
+                    <table id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>Nomi</th>
+                                <th>Qoldiq</th>
+                                <th>Birlik narxi</th>
+                                <th>Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Inv History -->
+                <div class="card table-scroll" style="grid-column: 1 / -1; margin-top: 10px;">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-history"></i> Omborga kirim qilish tarixi</div>
+                        <button class="btn btn-danger" onclick="clearInvHistory()"><i class="fas fa-trash"></i> Tarixni tozalash</button>
+                    </div>
+                    <table id="invHistoryTable">
+                        <thead>
+                            <tr>
+                                <th>Vaqt</th>
+                                <th>Nomi / Holati</th>
+                                <th>Qo'shilgan miqdor</th>
+                                <th>Olingan narxi</th>
+                                <th>Umumiy summa</th>
+                                <th>Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RETSEPTLAR SECTION -->
+        <div id="retsept" class="section">
+            <div class="grid" style="grid-template-columns: 1fr 2fr;">
+                <!-- Add Recipe -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-plus-circle"></i> Yangi HotDog turi</div>
+                    </div>
+                    <div class="form-group">
+                        <label>HotDog nomi</label>
+                        <input type="text" id="recName" class="form-control" placeholder="Masalan: Maxsus HotDog">
+                    </div>
+                    <div class="form-group">
+                        <label>Turkumi (Kategoriya)</label>
+                        <select id="recCategory" class="form-control" onchange="handleCategoryChange()">
+                            <option value="HotDog">HotDoglar</option>
+                            <option value="Ichimlik">Ichimliklar</option>
+                            <option value="Desert">Desertlar</option>
+                            <option value="Boshqa">Boshqalar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sotish narxi (so'm)</label>
+                        <input type="number" id="recPrice" class="form-control">
+                    </div>
+
+                    <div id="recipeIngredientsWrapper">
+                        <label style="font-weight: 600; margin-bottom: 5px; display: block; color: var(--text-main);">Kerakli masalliqlar</label>
+                        <div style="background: var(--bg-body); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 10px;">
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; align-items: stretch;">
+                                <div style="flex: 1; min-width: 110px;">
+                                    <select id="ingSelect" class="form-control" onchange="handleIngredientSelect()" style="height: 100%; padding: 6px 8px; font-size: 0.88rem;">
+                                        <option value="">-- Masalliq tanlang --</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1; min-width: 90px;">
+                                    <div style="display: flex; gap: 4px; height: 100%;">
+                                        <input type="number" id="ingQty" class="form-control" placeholder="Miqdor" style="flex: 2; padding: 6px 8px; font-size: 0.88rem;">
+                                        <input type="text" id="ingUnitDisplay" class="form-control" disabled style="flex: 1; background: #e9ecef; cursor: not-allowed; padding: 6px 4px; text-align: center; max-width: 55px; font-size: 0.85rem;" placeholder="x">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" style="padding: 6px 12px; height: 100%;" onclick="addRecipeIngredient()"><i class="fas fa-plus"></i></button>
+                            </div>
+                            
+                            <ul id="currentIngredientsList" style="list-style: none; padding: 0; margin: 0;">
+                                <!-- Qo'shilgan masalliqlar chiqadi -->
+                            </ul>
+                            <div id="currentRecipeCostDisplay" style="margin-top: 10px; font-weight: bold; border-top: 1px solid var(--border-color); padding-top: 10px; display:none;">Umumiy tannarx: <span style="color: var(--danger);">0 so'm</span></div>
+                        </div>
+                    </div>
+
+                    <button id="btnSaveRec" class="btn btn-primary" style="width: 100%; margin-top: 20px;"
+                        onclick="addRecipe()"><i class="fas fa-save"></i> Retseptni saqlash</button>
+                </div>
+
+                <!-- Recipe List -->
+                <div class="card table-scroll">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-list"></i> Mavjud HotDoglar</div>
+                    </div>
+                    <table id="recipesTable">
+                        <thead>
+                            <tr>
+                                <th>Nomi</th>
+                                <th>Turkum</th>
+                                <th>Sotish narxi</th>
+                                <th>Tannarxi</th>
+                                <th>Tarkibi</th>
+                                <th>Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- XARAJATLAR SECTION -->
+        <div id="xarajat" class="section">
+            <div class="grid" style="grid-template-columns: 1fr 2fr;">
+                <!-- Add Expense -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-plus-circle"></i> Xarajat Qo'shish</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Xarajat sababi (Masalan: Ijara, Chiroq, Oylik)</label>
+                        <input type="text" id="expDesc" class="form-control" placeholder="Nima uchun...">
+                    </div>
+                    <div class="form-group">
+                        <label>Summasi (so'm)</label>
+                        <input type="number" id="expAmount" class="form-control" placeholder="Masalan: 50000">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="addExpense()"><i
+                            class="fas fa-save"></i> Saqlash</button>
+                </div>
+
+                <!-- Expenses List -->
+                <div class="card table-scroll">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-list"></i> Xarajatlar Tarixi</div>
+                    </div>
+                    <table id="expensesTable">
+                        <thead>
+                            <tr>
+                                <th>Vaqt</th>
+                                <th>Sababi</th>
+                                <th>Summa</th>
+                                <th>Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISOBOT SECTION -->
+        <div id="hisobot" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;">
+                <h2><i class="fas fa-chart-line"></i> Hisobotlar</h2>
+                <button class="btn btn-danger" onclick="clearSalesHistory()"><i class="fas fa-trash"></i> Tarixni tozalash</button>
+            </div>
+
+            <!-- SMENA -->
+            <div class="report-period period-shift">
+                <div class="report-period-header">
+                    <div class="period-icon"><i class="fas fa-fire"></i></div>
+                    <h3>Bugungi Smena <span>03:00 — 00:00</span></h3>
+                </div>
+                <div class="report-mini-stats">
+                    <div class="mini-stat">
+                        <div class="label">Jami Sotuvlar</div>
+                        <div class="value" id="statShiftSales">0 ta</div>
+                    </div>
+                    <div class="mini-stat has-payment-breakdown">
+                        <div class="label">Umumiy Tushum</div>
+                        <div class="value revenue" id="statShiftRevenue">0 so'm</div>
+                        <div class="payment-breakdown">
+                            <div><span>Click:</span> <strong id="statShiftClick">0 so'm</strong></div>
+                            <div><span>ATTO / Payme:</span> <strong id="statShiftAtto">0 so'm</strong></div>
+                            <div><span>Naqd pul:</span> <strong id="statShiftCash">0 so'm</strong></div>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Xarajat (Masalliq)</div>
+                        <div class="value expense" id="statShiftCost">0 so'm</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Boshqa Xarajatlar</div>
+                        <div class="value expense" id="statShiftExpenses">0 so'm</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Sof Foyda</div>
+                        <div class="value profit-positive" id="statShiftProfit">0 so'm</div>
+                    </div>
+                </div>
+                <button class="report-sales-toggle" onclick="toggleReportTable('shift')">
+                    <i class="fas fa-chevron-down" id="toggleIconShift"></i> Sotuvlar tarixini ko'rish
+                </button>
+                <div class="report-sales-table" id="salesTableShift">
+                    <table><thead><tr><th>Vaqt</th><th>Nomi</th><th>Sotilgan narx</th><th>To'lov</th><th>Tannarxi</th><th>Foyda</th></tr></thead><tbody id="tbodyShift"></tbody></table>
+                </div>
+            </div>
+
+            <!-- OYLIK -->
+            <div class="report-period period-month">
+                <div class="report-period-header">
+                    <div class="period-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>Shu Oy <span>Oxirgi 30 kun</span></h3>
+                </div>
+                <div class="report-mini-stats">
+                    <div class="mini-stat">
+                        <div class="label">Jami Sotuvlar</div>
+                        <div class="value" id="statMonthSales">0 ta</div>
+                    </div>
+                    <div class="mini-stat has-payment-breakdown">
+                        <div class="label">Umumiy Tushum</div>
+                        <div class="value revenue" id="statMonthRevenue">0 so'm</div>
+                        <div class="payment-breakdown">
+                            <div><span>Click:</span> <strong id="statMonthClick">0 so'm</strong></div>
+                            <div><span>ATTO / Payme:</span> <strong id="statMonthAtto">0 so'm</strong></div>
+                            <div><span>Naqd pul:</span> <strong id="statMonthCash">0 so'm</strong></div>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Xarajat (Masalliq)</div>
+                        <div class="value expense" id="statMonthCost">0 so'm</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Boshqa Xarajatlar</div>
+                        <div class="value expense" id="statMonthExpenses">0 so'm</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Sof Foyda</div>
+                        <div class="value profit-positive" id="statMonthProfit">0 so'm</div>
+                    </div>
+                </div>
+                <button class="report-sales-toggle" onclick="toggleReportTable('month')">
+                    <i class="fas fa-chevron-down" id="toggleIconMonth"></i> Sotuvlar tarixini ko'rish
+                </button>
+                <div class="report-sales-table" id="salesTableMonth">
+                    <table><thead><tr><th>Vaqt</th><th>Nomi</th><th>Sotilgan narx</th><th>To'lov</th><th>Tannarxi</th><th>Foyda</th></tr></thead><tbody id="tbodyMonth"></tbody></table>
+                </div>
+            </div>
+
+            <!-- YILLIK -->
+            <div class="report-period period-year">
+                <div class="report-period-header">
+                    <div class="period-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Yillik Hisobot <span>Oxirgi 1 yil</span></h3>
+                </div>
+                <div class="report-mini-stats">
+                    <div class="mini-stat">
+                        <div class="label">Jami Sotuvlar</div>
+                        <div class="value" id="statYearSales">0 ta</div>
+                    </div>
+                    <div class="mini-stat has-payment-breakdown">
+                        <div class="label">Umumiy Tushum</div>
+                        <div class="value revenue" id="statYearRevenue">0 so'm</div>
+                        <div class="payment-breakdown">
+                            <div><span>Click:</span> <strong id="statYearClick">0 so'm</strong></div>
+                            <div><span>ATTO / Payme:</span> <strong id="statYearAtto">0 so'm</strong></div>
+                            <div><span>Naqd pul:</span> <strong id="statYearCash">0 so'm</strong></div>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Xarajat (Masalliq)</div>
+                        <div class="value expense" id="statYearCost">0 so'm</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Boshqa Xarajatlar</div>
+                        <div class="value expense" id="statYearExpenses">0 so'm</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="label">Sof Foyda</div>
+                        <div class="value profit-positive" id="statYearProfit">0 so'm</div>
+                    </div>
+                </div>
+                <button class="report-sales-toggle" onclick="toggleReportTable('year')">
+                    <i class="fas fa-chevron-down" id="toggleIconYear"></i> Sotuvlar tarixini ko'rish
+                </button>
+                <div class="report-sales-table" id="salesTableYear">
+                    <table><thead><tr><th>Vaqt</th><th>Nomi</th><th>Sotilgan narx</th><th>To'lov</th><th>Tannarxi</th><th>Foyda</th></tr></thead><tbody id="tbodyYear"></tbody></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="paymentModal" onclick="if(event.target===this) closePaymentModal()">
+        <div class="payment-modal">
+            <div class="payment-modal-header">
+                <h3><i class="fas fa-credit-card"></i> To'lov</h3>
+                <button class="cart-icon-btn" onclick="closePaymentModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="payment-total">
+                <span>Jami summa</span>
+                <span id="paymentModalTotal">0 so'm</span>
+            </div>
+            <div class="payment-options">
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="Click" checked>
+                    <span><i class="fas fa-mobile-screen-button"></i> Click</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="ATTO / Payme">
+                    <span><i class="fas fa-credit-card"></i> ATTO / Payme</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="Naqd pul">
+                    <span><i class="fas fa-money-bill-wave"></i> Naqd pul</span>
+                </label>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn btn-outline" onclick="closePaymentModal()">Bekor qilish</button>
+                <button class="btn btn-success" onclick="confirmCartSale()"><i class="fas fa-check"></i> Tasdiqlash</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Structure & Storage
+        const STORAGE_KEY = 'polvon_hisob_data';
+
+        // Bo'sh baza
+        const defaultData = {
+            inventory: [],
+            recipes: [],
+            sales: [],
+            expenses: [],
+            invHistory: [],
+            monthlyArchive: [],
+            yearlyArchive: []
+        };
+
+        let editingInvId = null;
+        let editingRecId = null;
+        let data = { inventory: [], recipes: [], sales: [], expenses: [], invHistory: [], monthlyArchive: [], yearlyArchive: [] };
+        let cart = [];
+
+        const PAYMENT_METHODS = ['Click', 'ATTO / Payme', 'Naqd pul'];
+
+        const API_URL = 'https://script.google.com/macros/s/AKfycbznLh5nT1spgrmgKwLUiWquVV2oY0f61yLbfK8MLIPnHDkeOcxeZATHkLxjT-5zOvG-/exec';
+
+        function createPaymentTotals() {
+            return PAYMENT_METHODS.reduce((acc, method) => {
+                acc[method] = 0;
+                return acc;
+            }, {});
+        }
+
+        function normalizePaymentTotals(totals, totalRevenue = 0) {
+            const normalized = createPaymentTotals();
+            if (totals) {
+                PAYMENT_METHODS.forEach(method => {
+                    normalized[method] = Number(totals[method]) || 0;
+                });
+            }
+
+            const assigned = PAYMENT_METHODS.reduce((sum, method) => sum + normalized[method], 0);
+            if (totalRevenue > assigned) {
+                normalized['Naqd pul'] += totalRevenue - assigned;
+            }
+            return normalized;
+        }
+
+        function addPaymentTotals(target, source) {
+            const safeSource = normalizePaymentTotals(source);
+            PAYMENT_METHODS.forEach(method => {
+                target[method] = (target[method] || 0) + safeSource[method];
+            });
+            return target;
+        }
+
+        function getPaymentMethod(sale) {
+            return PAYMENT_METHODS.includes(sale.paymentMethod) ? sale.paymentMethod : 'Naqd pul';
+        }
+
+        function getPaymentTotalsFromSales(sales) {
+            const totals = createPaymentTotals();
+            sales.forEach(sale => {
+                totals[getPaymentMethod(sale)] += Number(sale.price) || 0;
+            });
+            return totals;
+        }
+
+        function normalizeDataShape(target = data) {
+            target.inventory = target.inventory || [];
+            target.recipes = target.recipes || [];
+            target.sales = target.sales || [];
+            target.expenses = target.expenses || [];
+            target.invHistory = target.invHistory || [];
+            target.monthlyArchive = target.monthlyArchive || [];
+            target.yearlyArchive = target.yearlyArchive || [];
+
+            target.recipes.forEach(recipe => {
+                if (!recipe.ingredients) recipe.ingredients = [];
+            });
+
+            target.sales.forEach(sale => {
+                if (!sale.paymentMethod) sale.paymentMethod = 'Naqd pul';
+            });
+            target.monthlyArchive.forEach(entry => {
+                entry.paymentTotals = normalizePaymentTotals(entry.paymentTotals, entry.totalRevenue || 0);
+            });
+            target.yearlyArchive.forEach(entry => {
+                entry.paymentTotals = normalizePaymentTotals(entry.paymentTotals, entry.totalRevenue || 0);
+            });
+        }
+
+        function touchDataTimestamp() {
+            data.updatedAt = new Date().toISOString();
+        }
+
+        function getDataTimestamp(payload) {
+            if (!payload || !payload.updatedAt) return 0;
+            const ts = Date.parse(payload.updatedAt);
+            return Number.isNaN(ts) ? 0 : ts;
+        }
+
+        function hasAnyStoredData(payload) {
+            if (!payload) return false;
+            return (payload.inventory && payload.inventory.length > 0)
+                || (payload.recipes && payload.recipes.length > 0)
+                || (payload.sales && payload.sales.length > 0)
+                || (payload.expenses && payload.expenses.length > 0)
+                || (payload.invHistory && payload.invHistory.length > 0)
+                || (payload.monthlyArchive && payload.monthlyArchive.length > 0)
+                || (payload.yearlyArchive && payload.yearlyArchive.length > 0);
+        }
+
+        function applyData(nextData) {
+            data = nextData;
+            normalizeDataShape();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            renderAll();
+        }
+
+        async function syncToCloud(payload = data) {
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.error("Bulutga saqlashda xatolik:", err);
+            }
+        }
+
+        async function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            let localData;
+
+            if (saved) {
+                localData = JSON.parse(saved);
+            } else {
+                localData = JSON.parse(JSON.stringify(defaultData));
+            }
+
+            normalizeDataShape(localData);
+            applyData(localData);
+
+            // Agar lokal ma'lumot mavjud bo'lsa — bulutdan yuklamaymiz, faqat bulutga yuboramiz
+            if (saved !== null) {
+                try {
+                    showNotification("Ma'lumotlar yuklandi ✓", "success");
+                    // Lokal ma'lumotni bulutga sinxronlaymiz (fon rejimida)
+                    await syncToCloud(localData);
+                } catch (err) {
+                    console.error("Bulutga yuklashda xatolik:", err);
+                }
+                return;
+            }
+
+            // Faqat yangi qurilmada (lokal ma'lumot yo'q bo'lganda) bulutdan yuklaymiz
+            try {
+                showNotification("Bulutdan ma'lumotlar yuklanmoqda...", "success");
+                const response = await fetch(API_URL);
+                if (!response.ok) return;
+
+                const cloudData = await response.json();
+                if (cloudData.error) return;
+
+                normalizeDataShape(cloudData);
+
+                if (hasAnyStoredData(cloudData)) {
+                    applyData(cloudData);
+                    showNotification("Ma'lumotlar bulutdan yuklandi.", "success");
+                }
+            } catch (err) {
+                console.error("Bulutdan yuklashda xatolik:", err);
+                showNotification("Internetga ulanishda muammo! Mahalliy xotiradan foydalanilmoqda.", "error");
+            }
+        }
+
+        async function saveData() {
+            touchDataTimestamp();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            renderAll();
+            await syncToCloud();
+        }
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('polvon_logged_in') === 'true') {
+                showApp();
+            }
+            loadData();
+
+            // Dark mode preference
+            if (localStorage.getItem('polvon_hisob_dark') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.getElementById('paymentModal').classList.contains('open')) {
+                    closePaymentModal();
+                }
+            });
+        });
+
+        // Authentication
+        function login() {
+            const u = document.getElementById('loginUsername').value;
+            const p = document.getElementById('loginPassword').value;
+            if (u === 'shoxjoxon' && p === '1234') {
+                sessionStorage.setItem('polvon_logged_in', 'true');
+                showApp();
+                showNotification("Tizimga muvaffaqiyatli kirdingiz!", "success");
+            } else {
+                showNotification("Login yoki parol xato!", "error");
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('polvon_logged_in');
+            document.getElementById('app-container').style.display = 'none';
+            document.getElementById('login-container').style.display = 'flex';
+        }
+
+        function showApp() {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+            renderAll();
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('polvon_hisob_dark', isDark);
+        }
+
+        function switchTab(tabId) {
+            const tabOrder = ['sotuv', 'ombor', 'retsept', 'xarajat', 'hisobot'];
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.main-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+
+            const clickedBtn = (typeof event !== 'undefined' && event && event.currentTarget) ? event.currentTarget : null;
+            if (clickedBtn && clickedBtn.classList.contains('tab-btn')) {
+                clickedBtn.classList.add('active');
+            } else {
+                const idx = tabOrder.indexOf(tabId);
+                const mainTabs = document.querySelectorAll('.main-tabs .tab-btn');
+                if (idx >= 0 && mainTabs[idx]) mainTabs[idx].classList.add('active');
+            }
+            renderAll();
+        }
+
+        function showNotification(msg, type) {
+            const n = document.getElementById('notification');
+            n.textContent = msg; n.className = `notification ${type}`; n.style.display = 'block';
+            setTimeout(() => n.style.display = 'none', 3000);
+        }
+
+        function formatMoney(num) {
+            return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm";
+        }
+
+        // ================= OMBOR LOGIC =================
+        function addInventory() {
+            const name = document.getElementById('invName').value;
+            const buyUnit = document.getElementById('invBuyUnit').value;
+            let buyQty = parseFloat(document.getElementById('invQty').value);
+            let buyPricePerUnit = parseFloat(document.getElementById('invPrice').value);
+
+            if (!name || isNaN(buyQty) || isNaN(buyPricePerUnit)) {
+                return showNotification("Barcha maydonlarni to'ldiring!", "error");
+            }
+
+            let unit = 'dona';
+            let qty = buyQty;
+            let unitPrice = buyPricePerUnit;
+
+            if (buyUnit === 'kg') {
+                unit = 'gramm';
+                qty = buyQty * 1000;
+                unitPrice = buyPricePerUnit / 1000;
+            } else if (buyUnit === 'litr') {
+                unit = 'ml';
+                qty = buyQty * 1000;
+                unitPrice = buyPricePerUnit / 1000;
+            } else if (buyUnit === 'gramm') {
+                unit = 'gramm';
+            }
+
+            if (editingInvId !== null) {
+                const existing = data.inventory.find(i => i.id === editingInvId);
+                if (existing) {
+                    existing.name = name;
+                    existing.unit = unit;
+                    existing.qty = qty;
+                    existing.unitPrice = unitPrice;
+                    showNotification("Mahsulot tahrirlandi!", "success");
+                }
+                editingInvId = null;
+                document.getElementById('btnSaveInv').innerHTML = 'Omborga qo\'shish';
+            } else {
+                const existing = data.inventory.find(i => i.name.toLowerCase() === name.toLowerCase() && i.unit === unit);
+                if (existing) {
+                    const totalCurrentValue = existing.qty * existing.unitPrice;
+                    const newAddedValue = qty * unitPrice;
+                    existing.qty += qty;
+                    existing.unitPrice = (totalCurrentValue + newAddedValue) / existing.qty;
+                    showNotification("Mavjud mahsulot zaxirasi yangilandi!", "success");
+                    if (!data.invHistory) data.invHistory = [];
+                    data.invHistory.push({ id: Date.now(), name, qty, unit, unitPrice, total: newAddedValue, date: new Date().toISOString(), type: 'Qo\'shildi' });
+                } else {
+                    data.inventory.push({ id: Date.now(), name, unit, qty, unitPrice });
+                    showNotification("Mahsulot omborga qo'shildi!", "success");
+                    if (!data.invHistory) data.invHistory = [];
+                    data.invHistory.push({ id: Date.now(), name, qty, unit, unitPrice, total: qty * unitPrice, date: new Date().toISOString(), type: 'Yangi' });
+                }
+            }
+
+            document.getElementById('invName').value = '';
+            document.getElementById('invQty').value = '';
+            document.getElementById('invPrice').value = '';
+
+            recalculateRecipes();
+            saveData();
+        }
+
+        function editInventory(id) {
+            const item = data.inventory.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('invName').value = item.name;
+            let formQty = item.qty;
+            let formPrice = item.unitPrice;
+            let formUnit = 'dona';
+
+            if (item.unit === 'gramm') {
+                if (item.qty >= 1000 || item.unitPrice < 1) {
+                    formUnit = 'kg';
+                    formQty = item.qty / 1000;
+                    formPrice = item.unitPrice * 1000;
+                } else {
+                    formUnit = 'gramm';
+                }
+            } else if (item.unit === 'ml') {
+                formUnit = 'litr';
+                formQty = item.qty / 1000;
+                formPrice = item.unitPrice * 1000;
+            } else {
+                formUnit = item.unit;
+            }
+
+            document.getElementById('invBuyUnit').value = formUnit;
+            document.getElementById('invQty').value = formQty;
+            document.getElementById('invPrice').value = formPrice;
+
+            editingInvId = id;
+            document.getElementById('btnSaveInv').innerHTML = '<i class="fas fa-save"></i> Saqlash (Yangilash)';
+            switchTab('ombor');
+        }
+
+        function deleteInventory(id) {
+            if (confirm("Bu mahsulotni ombordan o'chirishga ishonchingiz komilmi? Unga bog'liq retseptlar ishlamay qolishi mumkin.")) {
+                data.inventory = data.inventory.filter(i => i.id !== id);
+                recalculateRecipes();
+                saveData();
+                showNotification("Mahsulot ombordan o'chirildi.", "success");
+            }
+        }
+
+        function quickAddQty(id) {
+            const item = data.inventory.find(i => i.id === id);
+            if (!item) return;
+
+            let displayUnit = item.unit;
+            if (item.unit === 'gramm') displayUnit = 'kg';
+            if (item.unit === 'ml') displayUnit = 'litr';
+
+            let val = prompt(`"${item.name}" qoldig'iga qancha ${displayUnit} qo'shmoqchisiz?\n(Vergul o'rniga nuqta ishlating, masalan: 2 yoki 0.5)`);
+            if (!val) return;
+
+            // Vergulni nuqtaga almashtiramiz
+            val = val.replace(',', '.');
+            let addQty = parseFloat(val);
+            if (isNaN(addQty) || addQty <= 0) return showNotification("Noto'g'ri miqdor!", "error");
+
+            let displayAdded = addQty; // Userga ko'rsatish uchun
+
+            // Biz har doim so'ralgan kattalik(kg/litr) dan bazaviy o'lchovga(gramm/ml) aylantiramiz
+            if (item.unit === 'gramm') {
+                addQty = addQty * 1000;
+            } else if (item.unit === 'ml') {
+                addQty = addQty * 1000;
+            }
+
+            item.qty += addQty;
+            
+            if (!data.invHistory) data.invHistory = [];
+            data.invHistory.push({ id: Date.now(), name: item.name, qty: addQty, unit: item.unit, unitPrice: item.unitPrice, total: addQty * item.unitPrice, date: new Date().toISOString(), type: 'Zaxira (+)' });
+
+            showNotification(`${item.name} ga ${displayAdded} ${displayUnit} qo'shildi! Yangi qoldiq: ${formatQty(item.qty, item.unit)}`, "success");
+            saveData();
+        }
+
+        function formatQty(qty, unit) {
+            if (unit === 'gramm' && qty >= 1000) {
+                return (qty / 1000).toFixed(2).replace(/\.00$/, '') + ' kg';
+            }
+            if (unit === 'ml' && qty >= 1000) {
+                return (qty / 1000).toFixed(2).replace(/\.00$/, '') + ' Litr';
+            }
+            return qty.toFixed(1).replace(/\.0$/, '') + ' ' + unit;
+        }
+
+        function renderInventory() {
+            const tbody = document.querySelector('#inventoryTable tbody');
+            tbody.innerHTML = '';
+            data.inventory.forEach(item => {
+                const formattedQty = formatQty(item.qty, item.unit);
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${item.name}</strong></td>
+                        <td><span style="color: ${item.qty <= 0 ? 'var(--danger)' : 'var(--text-main)'}; font-weight: bold; font-size:1.1rem;">${formattedQty}</span></td>
+                        <td>${formatMoney(item.unitPrice)} / ${item.unit}</td>
+                        <td>
+                            <button class="btn btn-success" style="padding: 5px 10px; margin-right: 5px;" onclick="quickAddQty(${item.id})" title="Zaxira qo'shish (+)"><i class="fas fa-plus"></i></button>
+                            <button class="btn btn-primary" style="padding: 5px 10px; margin-right: 5px;" onclick="editInventory(${item.id})" title="Tahrirlash"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteInventory(${item.id})" title="O'chirish"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ================= RETSEPT LOGIC =================
+        let currentParsedIngredients = [];
+        let currentParsedCost = 0;
+
+        function populateIngredientSelect() {
+            const select = document.getElementById('ingSelect');
+            if(!select) return;
+            select.innerHTML = '<option value="">-- Masalliq tanlang --</option>';
+            data.inventory.forEach(inv => {
+                select.innerHTML += `<option value="${inv.id}" data-unit="${inv.unit}">${inv.name}</option>`;
+            });
+        }
+
+        function handleCategoryChange() {
+            const wrapper = document.getElementById('recipeIngredientsWrapper');
+            wrapper.style.display = 'block';
+            populateIngredientSelect();
+        }
+
+        function handleIngredientSelect() {
+            const select = document.getElementById('ingSelect');
+            const unitInput = document.getElementById('ingUnitDisplay');
+            if(select.selectedIndex <= 0) {
+                unitInput.value = '';
+                return;
+            }
+            const option = select.options[select.selectedIndex];
+            unitInput.value = option.getAttribute('data-unit');
+            document.getElementById('ingQty').focus();
+        }
+
+        function addRecipeIngredient() {
+            const select = document.getElementById('ingSelect');
+            const qtyInput = document.getElementById('ingQty');
+            const qty = parseFloat(qtyInput.value);
+
+            if (select.selectedIndex <= 0 || isNaN(qty) || qty <= 0) {
+                return showNotification("Masalliqni va miqdorni to'g'ri tanlang!", "error");
+            }
+
+            const invId = parseInt(select.value);
+            const inv = data.inventory.find(i => i.id === invId);
+            if (!inv) return;
+
+            const existing = currentParsedIngredients.find(p => p.invId === invId);
+            if (existing) {
+                existing.qty += qty;
+                existing.cost = existing.qty * inv.unitPrice;
+            } else {
+                currentParsedIngredients.push({
+                    invId: invId,
+                    qty: qty,
+                    name: inv.name,
+                    unit: inv.unit,
+                    cost: qty * inv.unitPrice
+                });
+            }
+
+            select.selectedIndex = 0;
+            qtyInput.value = '';
+            document.getElementById('ingUnitDisplay').value = '';
+            
+            recalcCurrentRecipeCost();
+            renderCurrentRecipeIngredients();
+        }
+
+        function removeRecipeIngredient(index) {
+            currentParsedIngredients.splice(index, 1);
+            recalcCurrentRecipeCost();
+            renderCurrentRecipeIngredients();
+        }
+
+        function recalcCurrentRecipeCost() {
+            currentParsedCost = 0;
+            currentParsedIngredients.forEach(p => {
+                const inv = data.inventory.find(i => i.id === p.invId);
+                if (inv) {
+                    p.cost = inv.unitPrice * p.qty;
+                    currentParsedCost += p.cost;
+                }
+            });
+        }
+
+        function renderCurrentRecipeIngredients() {
+            const list = document.getElementById('currentIngredientsList');
+            const costDisplay = document.getElementById('currentRecipeCostDisplay');
+            if(!list || !costDisplay) return;
+
+            list.innerHTML = '';
+            if (currentParsedIngredients.length === 0) {
+                costDisplay.style.display = 'none';
+                return;
+            }
+
+            currentParsedIngredients.forEach((p, index) => {
+                list.innerHTML += `
+                    <li style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                        <div><strong style="color:var(--text-main);">${p.name}</strong> - ${p.qty} ${p.unit}</div>
+                        <div style="display:flex; align-items:center; gap: 10px;">
+                            <span style="color: var(--danger); font-size: 0.85rem;">${formatMoney(p.cost)}</span>
+                            <button class="btn btn-danger" style="padding: 2px 5px; font-size: 0.8rem;" onclick="removeRecipeIngredient(${index})"><i class="fas fa-times"></i></button>
+                        </div>
+                    </li>
+                `;
+            });
+
+            costDisplay.innerHTML = `Umumiy tannarx: <span style="color: var(--danger);">${formatMoney(currentParsedCost)}</span>`;
+            costDisplay.style.display = 'block';
+        }
+
+        function addRecipe() {
+            const name = document.getElementById('recName').value;
+            const category = document.getElementById('recCategory').value;
+            const price = parseFloat(document.getElementById('recPrice').value);
+
+            if (!name || isNaN(price)) return showNotification("Nom va narxni kiriting!", "error");
+            if (currentParsedIngredients.length === 0) {
+                return showNotification("Kamida bitta masalliq tanlang!", "error");
+            }
+
+            if (editingRecId !== null) {
+                const existing = data.recipes.find(r => r.id === editingRecId);
+                if (existing) {
+                    existing.name = name;
+                    existing.category = category;
+                    existing.price = price;
+                    existing.costPrice = currentParsedCost;
+                    existing.ingredients = JSON.parse(JSON.stringify(currentParsedIngredients));
+                    showNotification("Retsept yangilandi!", "success");
+                }
+                editingRecId = null;
+                document.getElementById('btnSaveRec').innerHTML = '<i class="fas fa-save"></i> Retseptni saqlash';
+            } else {
+                data.recipes.push({
+                    id: Date.now(),
+                    name, category, price, costPrice: currentParsedCost, ingredients: JSON.parse(JSON.stringify(currentParsedIngredients))
+                });
+                showNotification("Retsept saqlandi!", "success");
+            }
+
+            document.getElementById('recName').value = '';
+            document.getElementById('recPrice').value = '';
+            const sec = document.getElementById('ingSelect');
+            if(sec) sec.selectedIndex = 0;
+            const qtyI = document.getElementById('ingQty');
+            if(qtyI) qtyI.value = '';
+            const unI = document.getElementById('ingUnitDisplay');
+            if(unI) unI.value = '';
+            
+            currentParsedIngredients = [];
+            currentParsedCost = 0;
+            renderCurrentRecipeIngredients();
+
+            saveData();
+        }
+
+        function editRecipe(id) {
+            const recipe = data.recipes.find(r => r.id === id);
+            if (!recipe) return;
+
+            document.getElementById('recName').value = recipe.name;
+            const categoryObj = document.getElementById('recCategory');
+            if (recipe.category) {
+                categoryObj.value = recipe.category;
+            } else {
+                categoryObj.value = 'HotDog';
+            }
+            document.getElementById('recPrice').value = recipe.price;
+
+            handleCategoryChange();
+
+            currentParsedIngredients = JSON.parse(JSON.stringify(recipe.ingredients || []));
+            recalcCurrentRecipeCost();
+            renderCurrentRecipeIngredients();
+
+            editingRecId = id;
+            document.getElementById('btnSaveRec').innerHTML = '<i class="fas fa-save"></i> Saqlash (Yangilash)';
+            switchTab('retsept');
+        }
+
+        function deleteRecipe(id) {
+            if (confirm("O'chirishga ishonchingiz komilmi?")) {
+                data.recipes = data.recipes.filter(r => r.id !== id);
+                saveData();
+            }
+        }
+
+        function recalculateRecipes() {
+            // Update cost prices if inventory prices changed
+            data.recipes.forEach(r => {
+                let cost = 0;
+                const ings = r.ingredients || [];
+                ings.forEach(ing => {
+                    const inv = data.inventory.find(i => i.id === ing.invId);
+                    if (inv) cost += inv.unitPrice * ing.qty;
+                });
+                r.costPrice = cost;
+            });
+        }
+
+        function renderRecipes() {
+            const tbody = document.querySelector('#recipesTable tbody');
+            tbody.innerHTML = '';
+            data.recipes.forEach(r => {
+                const ingsArr = r.ingredients || [];
+                const ings = ingsArr.map(ing => {
+                    const inv = data.inventory.find(i => i.id === ing.invId);
+                    return inv ? `${inv.name}: ${ing.qty}${inv.unit}` : 'Noma\'lum';
+                }).join('<br>');
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${r.name}</strong></td>
+                        <td><span style="background: var(--bg-body); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">${r.category || 'HotDog'}</span></td>
+                        <td style="color:var(--success); font-weight:bold;">${formatMoney(r.price)}</td>
+                        <td style="color:var(--danger);">${formatMoney(r.costPrice)}</td>
+                        <td style="font-size:0.85rem;">${ings}</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 5px 10px; margin-right: 5px;" onclick="editRecipe(${r.id})"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteRecipe(${r.id})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ================= SOTUV LOGIC =================
+        function calculateMakeableCount(recipe) {
+            let minMakeable = Infinity;
+            const ingsArr = recipe.ingredients || [];
+            if (ingsArr.length === 0) return 999;
+            for (let ing of ingsArr) {
+                const inv = data.inventory.find(i => i.id === ing.invId);
+                if (!inv || inv.qty < ing.qty) return 0; // Not enough ingredients
+                const canMake = Math.floor(inv.qty / ing.qty);
+                if (canMake < minMakeable) minMakeable = canMake;
+            }
+            return minMakeable === Infinity ? 0 : minMakeable;
+        }
+
+        let currentSaleCategory = 'Barchasi';
+
+        function filterSales(cat) {
+            currentSaleCategory = cat;
+            document.querySelectorAll('#salesCategoryTabs .tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(cat)) btn.classList.add('active');
+            });
+            renderSales();
+        }
+
+        function getCartTotal() {
+            return cart.reduce((sum, item) => {
+                const recipe = data.recipes.find(r => r.id === item.recipeId);
+                return recipe ? sum + (recipe.price * item.qty) : sum;
+            }, 0);
+        }
+
+        function getCartReservedIngredients(customCart = cart) {
+            const reserved = {};
+            customCart.forEach(item => {
+                const recipe = data.recipes.find(r => r.id === item.recipeId);
+                if (!recipe) return;
+                const ingsArr = recipe.ingredients || [];
+                ingsArr.forEach(ing => {
+                    reserved[ing.invId] = (reserved[ing.invId] || 0) + (ing.qty * item.qty);
+                });
+            });
+            return reserved;
+        }
+
+        function isCartFulfillable(customCart = cart) {
+            const reserved = getCartReservedIngredients(customCart);
+            return Object.entries(reserved).every(([invId, qty]) => {
+                const inv = data.inventory.find(i => i.id === Number(invId));
+                return inv && inv.qty >= qty;
+            });
+        }
+
+        function getAvailableToAdd(recipe) {
+            const reserved = getCartReservedIngredients(cart);
+            let minAvailable = Infinity;
+            
+            const ingsArr = recipe.ingredients || [];
+            if (ingsArr.length === 0) {
+                return 999;
+            }
+
+            for (let ing of ingsArr) {
+                const inv = data.inventory.find(i => i.id === ing.invId);
+                if (!inv) return 0;
+                const currentReserved = reserved[ing.invId] || 0;
+                const remaining = inv.qty - currentReserved;
+                if (remaining < 0) return 0;
+                const additional = Math.floor(remaining / ing.qty);
+                if (additional < minAvailable) minAvailable = additional;
+            }
+            return minAvailable === Infinity ? 0 : minAvailable;
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cartList');
+            const totalEl = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (!list || !totalEl || !checkoutBtn) return;
+
+            cart = cart.filter(item => data.recipes.some(r => r.id === item.recipeId) && item.qty > 0);
+            totalEl.textContent = formatMoney(getCartTotal());
+            checkoutBtn.disabled = cart.length === 0 || !isCartFulfillable();
+            const freeBtn = document.getElementById('freeCheckoutBtn');
+            if (freeBtn) freeBtn.disabled = cart.length === 0 || !isCartFulfillable();
+
+            if (cart.length === 0) {
+                list.innerHTML = `<div class="cart-empty">Savat bo'sh</div>`;
+                return;
+            }
+
+            list.innerHTML = cart.map(item => {
+                const recipe = data.recipes.find(r => r.id === item.recipeId);
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-top">
+                            <div>
+                                <div class="cart-item-name">${recipe.name}</div>
+                                <div class="cart-item-price">${formatMoney(recipe.price)} x ${item.qty} = ${formatMoney(recipe.price * item.qty)}</div>
+                            </div>
+                            <button class="cart-icon-btn" onclick="removeFromCart(${recipe.id})" title="O'chirish"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="cart-qty-controls">
+                            <button class="cart-icon-btn" onclick="changeCartQty(${recipe.id}, -1)" title="Kamaytirish"><i class="fas fa-minus"></i></button>
+                            <span class="cart-qty">${item.qty}</span>
+                            <button class="cart-icon-btn" onclick="changeCartQty(${recipe.id}, 1)" title="Ko'paytirish"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSales() {
+            const grid = document.getElementById('salesGrid');
+            grid.innerHTML = '';
+
+            let filteredRecipes = data.recipes;
+            if (currentSaleCategory !== 'Barchasi') {
+                filteredRecipes = data.recipes.filter(r => (r.category || 'HotDog') === currentSaleCategory);
+            }
+
+            if (filteredRecipes.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Ushbu turkumda hali hech narsa yo'q.</div>`;
+                renderCart();
+                return;
+            }
+
+            filteredRecipes.forEach(r => {
+                const makeableCount = calculateMakeableCount(r);
+                const cartItem = cart.find(item => item.recipeId === r.id);
+                const cartQty = cartItem ? cartItem.qty : 0;
+                const availableToAdd = getAvailableToAdd(r);
+                const isAvailable = availableToAdd > 0;
+
+                const ingsArr = r.ingredients || [];
+                let ingsListHtml = ingsArr.map(ing => {
+                    const inv = data.inventory.find(i => i.id === ing.invId);
+                    if (!inv) return `<li>Xato masalliq</li>`;
+                    const isEnough = inv.qty >= ing.qty;
+                    const canMakeIng = ing.qty > 0 ? Math.floor(inv.qty / ing.qty) : 0;
+                    return `<li style="color: ${isEnough ? 'inherit' : 'var(--danger)'}">
+                                ${inv.name} - ${ing.qty}${inv.unit} 
+                                <span style="font-size:0.8rem">(Omborda: ${formatQty(inv.qty, inv.unit)} -> bu yana <strong>${canMakeIng} ta</strong> ga yetadi)</span>
+                            </li>`;
+                }).join('');
+
+                grid.innerHTML += `
+                    <div class="card sale-card" style="opacity: ${isAvailable ? 1 : 0.6}; border-color: ${isAvailable ? 'var(--primary)' : 'var(--border-color)'}">
+                        <div class="card-title" style="font-size: 1.5rem;">${r.name}</div>
+                        <div class="sale-price">${formatMoney(r.price)}</div>
+                        
+                        <div class="makeable-badge" style="background: rgba(255, 69, 0, 0.1); color: var(--primary); font-size: 1rem;">
+                            Qolgan masalliqlar yetadi: <strong>Yana ${makeableCount} ta tayyorlashga</strong>
+                        </div>
+                        
+                        <div class="ingredients-list">
+                            <strong>Kerakli masalliqlar:</strong>
+                            <ul>${ingsListHtml}</ul>
+                        </div>
+                        
+                        <div style="margin-top: auto; display: flex; gap:10px;">
+                            <button class="btn btn-success" style="flex:1; justify-content:center;" onclick="addToCart(${r.id})" ${!isAvailable ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i> Savatga qo'shish${cartQty ? ` (${cartQty})` : ''}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            renderCart();
+        }
+
+        function addToCart(recipeId) {
+            const recipe = data.recipes.find(r => r.id === recipeId);
+            if (!recipe) return;
+
+            const draftCart = cart.map(item => ({ ...item }));
+            const draftItem = draftCart.find(item => item.recipeId === recipeId);
+            if (draftItem) {
+                draftItem.qty += 1;
+            } else {
+                draftCart.push({ recipeId, qty: 1 });
+            }
+
+            if (!isCartFulfillable(draftCart)) {
+                return showNotification("Omborda masalliq yetarli emas!", "error");
+            }
+
+            cart = draftCart;
+            renderSales();
+            showNotification(`${recipe.name} savatga qo'shildi`, "success");
+        }
+
+        function changeCartQty(recipeId, delta, shouldRender = true) {
+            const item = cart.find(i => i.recipeId === recipeId);
+            if (!item) return;
+
+            const draftCart = cart.map(i => ({ ...i }));
+            const draftItem = draftCart.find(i => i.recipeId === recipeId);
+            draftItem.qty += delta;
+
+            if (draftItem.qty <= 0) {
+                cart = draftCart.filter(i => i.recipeId !== recipeId);
+            } else if (delta > 0 && !isCartFulfillable(draftCart)) {
+                if (shouldRender) showNotification("Omborda masalliq yetarli emas!", "error");
+                return;
+            } else {
+                cart = draftCart;
+            }
+
+            if (shouldRender) renderSales();
+        }
+
+        function removeFromCart(recipeId) {
+            cart = cart.filter(item => item.recipeId !== recipeId);
+            renderSales();
+        }
+
+        function clearCart() {
+            cart = [];
+            renderSales();
+        }
+
+        function processFreeCheckout() {
+            if (cart.length === 0) return showNotification("Savat bo'sh!", "error");
+            if (!isCartFulfillable()) return showNotification("Omborda masalliq yetarli emas!", "error");
+
+            if (!confirm("Haqiqatan ham tekinga berasizmi? (Savdoga yozilmaydi, faqat obordan kamayadi)")) return;
+
+            cart.forEach(item => {
+                const recipe = data.recipes.find(r => r.id === item.recipeId);
+                if (!recipe) return;
+
+                const ingsArr = recipe.ingredients || [];
+                ingsArr.forEach(ing => {
+                    const inv = data.inventory.find(i => i.id === ing.invId);
+                    if (inv) inv.qty -= ing.qty * item.qty;
+                });
+            });
+
+            cart = [];
+            showNotification("Tekinga berildi! Obordan masalliqlar chegirildi.", "success");
+            saveData();
+            renderSales();
+        }
+
+        function openPaymentModal() {
+            if (cart.length === 0) return showNotification("Savat bo'sh!", "error");
+            if (!isCartFulfillable()) return showNotification("Omborda masalliq yetarli emas!", "error");
+            document.getElementById('paymentModalTotal').textContent = formatMoney(getCartTotal());
+            const defaultPayment = document.querySelector('input[name="paymentMethod"][value="Click"]');
+            if (defaultPayment) defaultPayment.checked = true;
+            document.getElementById('paymentModal').classList.add('open');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('open');
+        }
+
+        function confirmCartSale() {
+            if (cart.length === 0) return closePaymentModal();
+            if (!isCartFulfillable()) {
+                closePaymentModal();
+                return showNotification("Omborda masalliq yetarli emas!", "error");
+            }
+
+            const selected = document.querySelector('input[name="paymentMethod"]:checked');
+            const paymentMethod = selected ? selected.value : 'Naqd pul';
+            const saleDate = new Date().toISOString();
+            let saleCounter = 0;
+
+            cart.forEach(item => {
+                const recipe = data.recipes.find(r => r.id === item.recipeId);
+                if (!recipe) return;
+
+                const ingsArr = recipe.ingredients || [];
+                ingsArr.forEach(ing => {
+                    const inv = data.inventory.find(i => i.id === ing.invId);
+                    if (inv) inv.qty -= ing.qty * item.qty;
+                });
+
+                for (let i = 0; i < item.qty; i++) {
+                    data.sales.push({
+                        id: Date.now() + saleCounter,
+                        recipeName: recipe.name,
+                        price: recipe.price,
+                        costPrice: recipe.costPrice,
+                        paymentMethod: paymentMethod,
+                        date: saleDate
+                    });
+                    saleCounter++;
+                }
+            });
+
+            cart = [];
+            closePaymentModal();
+            showNotification(`Savdo yakunlandi! To'lov: ${paymentMethod}`, "success");
+            saveData();
+        }
+
+        // ================= XARAJATLAR LOGIC =================
+        function addExpense() {
+            const desc = document.getElementById('expDesc').value;
+            const amount = parseFloat(document.getElementById('expAmount').value);
+
+            if (!desc || isNaN(amount) || amount <= 0) {
+                return showNotification("Xarajat sababi va summasini to'g'ri kiriting!", "error");
+            }
+
+            data.expenses.push({
+                id: Date.now(),
+                description: desc,
+                amount: amount,
+                date: new Date().toISOString(),
+                status: 'kutilmoqda'
+            });
+
+            showNotification("Xarajat saqlandi (Kutilmoqda)!", "success");
+            document.getElementById('expDesc').value = '';
+            document.getElementById('expAmount').value = '';
+            saveData();
+        }
+
+        function deleteExpense(id) {
+            if (confirm("Ushbu xarajatni o'chirishga ishonchingiz komilmi?")) {
+                data.expenses = data.expenses.filter(e => e.id !== id);
+                saveData();
+            }
+        }
+        
+        function completeExpense(id) {
+            const exp = data.expenses.find(e => e.id === id);
+            if(exp && exp.status !== 'tolandi') {
+                exp.status = 'tolandi';
+                exp.date = new Date().toISOString(); 
+                saveData();
+                showNotification("Xarajat amalga oshirildi va foydadan chegirildi!", "success");
+            }
+        }
+
+        function renderExpenses() {
+            const tbody = document.querySelector('#expensesTable tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const sorted = [...data.expenses].reverse();
+
+            sorted.forEach(e => {
+                const dateObj = new Date(e.date);
+                const dateStr = `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
+                let actionsHtml = '';
+                if (e.status === 'tolandi') {
+                    actionsHtml = `
+                        <span style="display:inline-block; background:rgba(40, 167, 69, 0.1); color:var(--success); padding:4px 10px; border-radius:12px; font-weight:bold; font-size:0.8rem; margin-right:5px;">Sarflandi (To'landi)</span>
+                        <button class="btn btn-outline" style="padding: 5px 10px; color:var(--danger)" onclick="deleteExpense(${e.id})" title="O'chirish"><i class="fas fa-trash"></i></button>
+                    `;
+                } else {
+                    actionsHtml = `
+                        <button class="btn btn-success" style="padding: 5px 10px; margin-right: 5px;" onclick="completeExpense(${e.id})" title="Hozir sarflanganini maqullash">Sarflandi</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteExpense(${e.id})" title="O'chirish"><i class="fas fa-trash"></i></button>
+                    `;
+                }
+
+                tbody.innerHTML += `
+                    <tr style="${e.status !== 'tolandi' ? 'background: rgba(255,193,7,0.05);' : ''}">
+                        <td><span style="font-size:0.85rem; color:var(--text-muted);">${dateStr}</span></td>
+                        <td><strong>${e.description}</strong></td>
+                        <td style="color:var(--danger); font-weight:bold;">${formatMoney(e.amount)}</td>
+                        <td>${actionsHtml}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ================= HISOBOT LOGIC =================
+        function isSaleInShift(dateStr) {
+            const saleDate = new Date(dateStr);
+            const now = new Date();
+            let shiftStart = new Date();
+            if (now.getHours() < 3) {
+                shiftStart.setDate(shiftStart.getDate() - 1);
+            }
+            shiftStart.setHours(3, 0, 0, 0);
+            let shiftEnd = new Date(shiftStart);
+            shiftEnd.setDate(shiftStart.getDate() + 1);
+            shiftEnd.setHours(0, 0, 0, 0);
+            return saleDate >= shiftStart && saleDate < shiftEnd;
+        }
+
+        function isSaleInMonth(dateStr) {
+            const saleDate = new Date(dateStr);
+            const now = new Date();
+            const diffDays = (now - saleDate) / (1000 * 60 * 60 * 24);
+            return diffDays >= 0 && diffDays <= 30;
+        }
+
+        function isSaleInYear(dateStr) {
+            const saleDate = new Date(dateStr);
+            const now = new Date();
+            const diffDays = (now - saleDate) / (1000 * 60 * 60 * 24);
+            return diffDays >= 0 && diffDays <= 365;
+        }
+
+        function toggleReportTable(period) {
+            const table = document.getElementById('salesTable' + period.charAt(0).toUpperCase() + period.slice(1));
+            const icon = document.getElementById('toggleIcon' + period.charAt(0).toUpperCase() + period.slice(1));
+            if (table.classList.contains('open')) {
+                table.classList.remove('open');
+                icon.className = 'fas fa-chevron-down';
+            } else {
+                table.classList.add('open');
+                icon.className = 'fas fa-chevron-up';
+            }
+        }
+
+        function renderPeriodStats(prefix, totalSales, totalRev, totalCost, totalExp, paymentTotals) {
+            const totalProfit = totalRev - totalCost - totalExp;
+            document.getElementById(prefix + 'Sales').textContent = `${totalSales} ta`;
+            document.getElementById(prefix + 'Revenue').textContent = formatMoney(totalRev);
+            document.getElementById(prefix + 'Cost').textContent = formatMoney(totalCost);
+            document.getElementById(prefix + 'Expenses').textContent = formatMoney(totalExp);
+
+            const profitEl = document.getElementById(prefix + 'Profit');
+            if (totalProfit < 0) {
+                profitEl.textContent = formatMoney(Math.abs(totalProfit));
+                profitEl.innerHTML += ' <small>(Zarar)</small>';
+                profitEl.className = 'value profit-negative';
+            } else {
+                profitEl.textContent = formatMoney(totalProfit);
+                profitEl.className = 'value profit-positive';
+            }
+
+            const safeTotals = normalizePaymentTotals(paymentTotals, totalRev);
+            const clickEl = document.getElementById(prefix + 'Click');
+            const attoEl = document.getElementById(prefix + 'Atto');
+            const cashEl = document.getElementById(prefix + 'Cash');
+            if (clickEl) clickEl.textContent = formatMoney(safeTotals['Click']);
+            if (attoEl) attoEl.textContent = formatMoney(safeTotals['ATTO / Payme']);
+            if (cashEl) cashEl.textContent = formatMoney(safeTotals['Naqd pul']);
+        }
+
+        function renderSalesTable(filtered, tbodyId) {
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = '';
+            for (let i = filtered.length - 1; i >= 0; i--) {
+                const s = filtered[i];
+                const profit = s.price - s.costPrice;
+                const dateObj = new Date(s.date);
+                const dateStr = `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                if (filtered.length - i <= 50) {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><span style="font-size:0.85rem; color:var(--text-muted);">${dateStr}</span></td>
+                            <td><strong>${s.recipeName}</strong></td>
+                            <td style="color:var(--success); font-weight:bold;">${formatMoney(s.price)}</td>
+                            <td><span style="font-size:0.85rem;">${getPaymentMethod(s)}</span></td>
+                            <td style="color:var(--danger);">${formatMoney(s.costPrice)}</td>
+                            <td style="color:var(--primary); font-weight:bold;">${formatMoney(profit)}</td>
+                        </tr>
+                    `;
+                }
+            }
+        }
+
+        // Bugungi Smena — faqat data.sales dan
+        function renderShiftReport() {
+            const filtered = data.sales.filter(s => isSaleInShift(s.date));
+            let totalRev = 0, totalCost = 0, totalExp = 0;
+            filtered.forEach(s => { totalRev += s.price; totalCost += s.costPrice; });
+            const filteredExp = data.expenses.filter(e => isSaleInShift(e.date) && e.status === 'tolandi');
+            filteredExp.forEach(e => { totalExp += e.amount; });
+            const paymentTotals = getPaymentTotalsFromSales(filtered);
+            renderPeriodStats('statShift', filtered.length, totalRev, totalCost, totalExp, paymentTotals);
+            renderSalesTable(filtered, 'tbodyShift');
+        }
+
+        // Oylik hisobot — data.sales (joriy) + monthlyArchive (arxivlangan kunlar)
+        function renderMonthReport() {
+            const archives = data.monthlyArchive || [];
+            const now = new Date();
+            const thirtyDaysAgo = new Date(now);
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            // Arxivdan oxirgi 30 kundagi ma'lumotlar
+            let archiveSales = 0, archiveRev = 0, archiveCost = 0, archiveExp = 0;
+            const archivePaymentTotals = createPaymentTotals();
+            archives.filter(a => new Date(a.date) >= thirtyDaysAgo).forEach(a => {
+                archiveSales += a.totalSales;
+                archiveRev += a.totalRevenue;
+                archiveCost += a.totalCost;
+                archiveExp += a.totalExpenses;
+                addPaymentTotals(archivePaymentTotals, a.paymentTotals);
+            });
+
+            // Joriy sotuvlardan oxirgi 30 kundagi
+            const liveSales = data.sales.filter(s => isSaleInMonth(s.date));
+            let liveRev = 0, liveCost = 0;
+            liveSales.forEach(s => { liveRev += s.price; liveCost += s.costPrice; });
+            const liveExp = data.expenses.filter(e => isSaleInMonth(e.date) && e.status === 'tolandi');
+            let liveExpTotal = 0;
+            liveExp.forEach(e => { liveExpTotal += e.amount; });
+
+            const livePaymentTotals = getPaymentTotalsFromSales(liveSales);
+            const totalPaymentTotals = addPaymentTotals(archivePaymentTotals, livePaymentTotals);
+
+            renderPeriodStats('statMonth',
+                archiveSales + liveSales.length,
+                archiveRev + liveRev,
+                archiveCost + liveCost,
+                archiveExp + liveExpTotal,
+                totalPaymentTotals
+            );
+            renderSalesTable(liveSales, 'tbodyMonth');
+        }
+
+        // Yillik hisobot — data.sales + monthlyArchive + yearlyArchive
+        function renderYearReport() {
+            const monthlyArchives = data.monthlyArchive || [];
+            const yearlyArchives = data.yearlyArchive || [];
+            const now = new Date();
+            const oneYearAgo = new Date(now);
+            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+            const oneYearAgoMonth = oneYearAgo.toISOString().substring(0, 7);
+
+            // Yillik arxivdan
+            let ySales = 0, yRev = 0, yCost = 0, yExp = 0;
+            const totalPaymentTotals = createPaymentTotals();
+            yearlyArchives.filter(a => a.month >= oneYearAgoMonth).forEach(a => {
+                ySales += a.totalSales;
+                yRev += a.totalRevenue;
+                yCost += a.totalCost;
+                yExp += a.totalExpenses;
+                addPaymentTotals(totalPaymentTotals, a.paymentTotals);
+            });
+
+            // Oylik arxivdan
+            monthlyArchives.forEach(a => {
+                ySales += a.totalSales;
+                yRev += a.totalRevenue;
+                yCost += a.totalCost;
+                yExp += a.totalExpenses;
+                addPaymentTotals(totalPaymentTotals, a.paymentTotals);
+            });
+
+            // Joriy sotuvlardan
+            const liveSales = data.sales.filter(s => isSaleInYear(s.date));
+            liveSales.forEach(s => { yRev += s.price; yCost += s.costPrice; });
+            ySales += liveSales.length;
+            const liveExp = data.expenses.filter(e => isSaleInYear(e.date) && e.status === 'tolandi');
+            liveExp.forEach(e => { yExp += e.amount; });
+
+            const livePaymentTotals = getPaymentTotalsFromSales(liveSales);
+            addPaymentTotals(totalPaymentTotals, livePaymentTotals);
+
+            renderPeriodStats('statYear', ySales, yRev, yCost, yExp, totalPaymentTotals);
+            renderSalesTable(liveSales, 'tbodyYear');
+        }
+
+        function renderAnalytics() {
+            renderShiftReport();
+            renderMonthReport();
+            renderYearReport();
+        }
+
+        function clearSalesHistory() {
+            if (confirm("Bugungi smena tozalanadi. Smena ma'lumotlari oylik hisobotga saqlanadi. Davom etsinmi?")) {
+                // Bugungi smenadagi sotuvlarni ajratamiz
+                const shiftSales = data.sales.filter(s => isSaleInShift(s.date));
+                const nonShiftSales = data.sales.filter(s => !isSaleInShift(s.date));
+
+                if (shiftSales.length > 0) {
+                    let totalRevenue = 0, totalCost = 0;
+                    shiftSales.forEach(s => {
+                        totalRevenue += s.price;
+                        totalCost += s.costPrice;
+                    });
+
+                    // Smenaga tegishli xarajatlar
+                    const shiftExpenses = data.expenses.filter(e => isSaleInShift(e.date) && e.status === 'tolandi');
+                    let totalExpenses = 0;
+                    shiftExpenses.forEach(e => { totalExpenses += e.amount; });
+
+                    const today = new Date();
+                    const dateKey = today.toISOString().split('T')[0];
+
+                    const shiftPaymentTotals = getPaymentTotalsFromSales(shiftSales);
+
+                    // Oylik arxivga qo'shamiz
+                    if (!data.monthlyArchive) data.monthlyArchive = [];
+
+                    // Agar bugungi kun uchun allaqachon arxiv bo'lsa, ustiga qo'shamiz
+                    const existingDay = data.monthlyArchive.find(a => a.date === dateKey);
+                    if (existingDay) {
+                        existingDay.totalSales += shiftSales.length;
+                        existingDay.totalRevenue += totalRevenue;
+                        existingDay.totalCost += totalCost;
+                        existingDay.totalExpenses += totalExpenses;
+                        existingDay.paymentTotals = addPaymentTotals(existingDay.paymentTotals || {}, shiftPaymentTotals);
+                    } else {
+                        data.monthlyArchive.push({
+                            id: Date.now(),
+                            date: dateKey,
+                            archivedAt: today.toISOString(),
+                            totalSales: shiftSales.length,
+                            totalRevenue: totalRevenue,
+                            totalCost: totalCost,
+                            totalExpenses: totalExpenses,
+                            paymentTotals: shiftPaymentTotals
+                        });
+                    }
+                }
+
+                // Faqat smenani tozalash, qolgan sotuvlar qoladi
+                data.sales = nonShiftSales;
+                saveData();
+                showNotification("Smena tozalandi! Ma'lumotlar oylik hisobotga saqlandi.", "success");
+            }
+        }
+
+        function factoryReset() {
+            if (confirm("DIQQAT! Barcha sotuvlar, oylik va yillik arxivlar xamda xarajatlar tarixi BUTUNLAY o'chib ketadi. Boshidan (noldan) boshlaysiz. Ishonchingiz komilmi?")) {
+                let code = prompt("Tasdiqlash uchun parolni kiriting (parol: 1234):");
+                if (code === '1234') {
+                    data.sales = [];
+                    data.expenses = [];
+                    data.monthlyArchive = [];
+                    data.yearlyArchive = [];
+                    saveData();
+                    showNotification("Barcha tarix va hisobotlar muvaffaqiyatli tozalandi! Noldan boshlandi.", "success");
+                } else {
+                    showNotification("Noto'g'ri parol kiritildi. Tozalash bekor qilindi.", "error");
+                }
+            }
+        }
+
+        // Oylik arxivni avtomatik yillikka o'tkazish (30 kundan eski bo'lsa)
+        function checkAndArchiveMonthly() {
+            if (!data.monthlyArchive) data.monthlyArchive = [];
+            if (!data.yearlyArchive) data.yearlyArchive = [];
+
+            const now = new Date();
+            const thirtyDaysAgo = new Date(now);
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            // 30 kundan eski oylik arxivlarni topamiz
+            const oldEntries = data.monthlyArchive.filter(a => new Date(a.date) < thirtyDaysAgo);
+            const freshEntries = data.monthlyArchive.filter(a => new Date(a.date) >= thirtyDaysAgo);
+
+            if (oldEntries.length > 0) {
+                // Eski yozuvlarni oy bo'yicha guruhlash
+                const monthGroups = {};
+                oldEntries.forEach(entry => {
+                    const monthKey = entry.date.substring(0, 7); // "2026-05"
+                    if (!monthGroups[monthKey]) {
+                        monthGroups[monthKey] = {
+                            totalSales: 0,
+                            totalRevenue: 0,
+                            totalCost: 0,
+                            totalExpenses: 0,
+                            paymentTotals: createPaymentTotals()
+                        };
+                    }
+                    monthGroups[monthKey].totalSales += entry.totalSales;
+                    monthGroups[monthKey].totalRevenue += entry.totalRevenue;
+                    monthGroups[monthKey].totalCost += entry.totalCost;
+                    monthGroups[monthKey].totalExpenses += entry.totalExpenses;
+                    monthGroups[monthKey].paymentTotals = addPaymentTotals(monthGroups[monthKey].paymentTotals, entry.paymentTotals);
+                });
+
+                // Yillik arxivga qo'shish
+                for (const [monthKey, totals] of Object.entries(monthGroups)) {
+                    const existingMonth = data.yearlyArchive.find(a => a.month === monthKey);
+                    if (existingMonth) {
+                        existingMonth.totalSales += totals.totalSales;
+                        existingMonth.totalRevenue += totals.totalRevenue;
+                        existingMonth.totalCost += totals.totalCost;
+                        existingMonth.totalExpenses += totals.totalExpenses;
+                        existingMonth.paymentTotals = addPaymentTotals(existingMonth.paymentTotals || {}, totals.paymentTotals);
+                    } else {
+                        data.yearlyArchive.push({
+                            id: Date.now(),
+                            month: monthKey,
+                            archivedAt: now.toISOString(),
+                            totalSales: totals.totalSales,
+                            totalRevenue: totals.totalRevenue,
+                            totalCost: totals.totalCost,
+                            totalExpenses: totals.totalExpenses,
+                            paymentTotals: totals.paymentTotals
+                        });
+                    }
+                }
+
+                // Eski yozuvlarni oylikdan o'chirish
+                data.monthlyArchive = freshEntries;
+
+                // 1 yildan eski yillik arxivlarni tozalash
+                const oneYearAgo = new Date(now);
+                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+                const oneYearAgoMonth = oneYearAgo.toISOString().substring(0, 7);
+                data.yearlyArchive = data.yearlyArchive.filter(a => a.month >= oneYearAgoMonth);
+
+                saveData();
+            }
+        }
+
+        function renderInvHistory() {
+            const tbody = document.querySelector('#invHistoryTable tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            
+            const history = data.invHistory || [];
+            const sorted = [...history].reverse();
+            
+            sorted.forEach(h => {
+                const dateObj = new Date(h.date);
+                const dateStr = `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td><span style="font-size:0.85rem; color:var(--text-muted);">${dateStr}</span></td>
+                        <td><strong>${h.name}</strong> <span style="font-size:0.8rem; background:var(--bg-body); padding:2px 5px; border-radius:4px; margin-left:5px; color: var(--primary); font-weight:bold;">${h.type}</span></td>
+                        <td style="color:var(--success); font-weight:bold;">+ ${formatQty(h.qty, h.unit)}</td>
+                        <td>${formatMoney(h.unitPrice)} / ${h.unit}</td>
+                        <td style="color:var(--danger); font-weight:bold;">${formatMoney(h.total)}</td>
+                        <td><button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteInvHistory(${h.id})"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+        
+        function clearInvHistory() {
+            if (confirm("Omborga kirim qilinganlar tarixini tozalashga ishonchingiz komilmi? (Zaxira qoldig'iga ta'sir qilmaydi)")) {
+                data.invHistory = [];
+                saveData();
+                showNotification("Ombor tarixi tozalandi", "success");
+            }
+        }
+        
+        function deleteInvHistory(id) {
+            if (confirm("Ushbu yozuvni o'chirishga ishonchingiz komilmi? (Zaxira qoldig'iga ta'sir qilmaydi)")) {
+                data.invHistory = data.invHistory.filter(h => h.id !== id);
+                saveData();
+            }
+        }
+
+        function checkLowStock() {
+            const alertBox = document.getElementById('lowStockAlert');
+            if (!alertBox) return;
+
+            let lowItems = [];
+            data.inventory.forEach(item => {
+                let isLow = false;
+                if (item.unit === 'gramm' && item.qty <= 1000) isLow = true;
+                if (item.unit === 'ml' && item.qty <= 1000) isLow = true;
+                if (item.unit === 'dona' && item.qty <= 5) isLow = true;
+
+                if (isLow) {
+                    lowItems.push(`${item.name} (${formatQty(item.qty, item.unit)})`);
+                }
+            });
+
+            if (lowItems.length > 0) {
+                alertBox.innerHTML = `⚠️ Diqqat! Quyidagi mahsulotlar tugab qolmoqda: <span style="font-weight: normal;">${lowItems.join(', ')}</span>`;
+                alertBox.style.display = 'block';
+            } else {
+                alertBox.style.display = 'none';
+            }
+        }
+
+        function renderAll() {
+            if (sessionStorage.getItem('polvon_logged_in') !== 'true') return;
+            checkAndArchiveMonthly();
+            renderInventory();
+            renderInvHistory();
+            renderRecipes();
+            populateIngredientSelect();
+            renderSales();
+            renderExpenses();
+            renderShiftReport();
+            renderMonthReport();
+            renderYearReport();
+            checkLowStock();
+        }
+    </script>
+</body>
+
+</html>
